@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<!--
+	Editorial by HTML5 UP
+	html5up.net | @ajlkn
+	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+-->
+<html xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+	  lang="ko">
+	<head>
+		<title>Elements - Editorial by HTML5 UP</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+				<div id="main">
+					<div class="inner">
+
+						<!-- Header -->
+						<header id="header" >
+							<th:block th:include="/header"></th:block>
+						</header>
+
+						<!-- Content -->
+						<section>
+							<header class="main">
+								<h1>Log In</h1>
+							</header>
+
+							<!-- Content -->
+							<hr class="major" />
+
+							<!-- Elements -->
+							<h2 id="elements">Log In</h2>
+							<div class="row gtr-200">
+								<div class="col-6 col-12-medium">
+									<form method="post" action="/auth">
+										<div class="row gtr-uniform">
+											<div class="col-12">
+												<input type="text" name="username" id="username" value="" placeholder="User ID" maxlength="20" />
+											</div>
+											<div class="col-12">
+												<input type="password" name="password" id="password" value="" placeholder="Password" maxlength="40"/>
+											</div>
+											<!-- Break -->
+											<div class="col-6 col-12-small">
+												<input type="checkbox" id="save-id" name="save-id">
+												<label for="save-id">save</label>
+											</div>
+											<!-- Break -->
+											<div class="col-12">
+												<ul class="actions">
+													<li><input type="submit" value="Log In" class="primary" /></li>
+													<li><input type="button" value="Sign In" /></li>
+												</ul>
+											</div>
+										</div>
+									</form>
+									<!-- Text stuff -->
+									<p>해당 사이트에 제공하는 모든 정보는 <u>회사 동의없이 수집, 배포, 전송 등의 행위</u>는 <b>엄격히 금지</b>합니다.</p>
+								</div>
+							</div>
+						</section>
+					</div>
+				</div>
+
+			<!-- Sidebar -->
+				<div id="sidebar">
+					<div class="inner">
+
+						<!-- Search -->
+							<section id="search" class="alt">
+								<form method="post" action="#">
+									<input type="text" name="query" id="query" placeholder="Search" />
+								</form>
+							</section>
+
+						<!-- Menu -->
+						<nav id="menu">
+							<th:block th:include="/menu"></th:block>
+						</nav>
+
+						<!-- Section -->
+							<section>
+								<header class="major">
+									<h2>Ante interdum</h2>
+								</header>
+								<div class="mini-posts">
+									<article>
+										<a href="#" class="image"><img src="images/pic07.jpg" alt="" /></a>
+										<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore aliquam.</p>
+									</article>
+									<article>
+										<a href="#" class="image"><img src="images/pic08.jpg" alt="" /></a>
+										<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore aliquam.</p>
+									</article>
+									<article>
+										<a href="#" class="image"><img src="images/pic09.jpg" alt="" /></a>
+										<p>Aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore aliquam.</p>
+									</article>
+								</div>
+								<ul class="actions">
+									<li><a href="#" class="button">More</a></li>
+								</ul>
+							</section>
+
+						<!-- Section -->
+							<section>
+								<header class="major">
+									<h2>Get in touch</h2>
+								</header>
+								<p>Sed varius enim lorem ullamcorper dolore aliquam aenean ornare velit lacus, ac varius enim lorem ullamcorper dolore. Proin sed aliquam facilisis ante interdum. Sed nulla amet lorem feugiat tempus aliquam.</p>
+								<ul class="contact">
+									<li class="icon solid fa-envelope"><a href="#">information@untitled.tld</a></li>
+									<li class="icon solid fa-phone">(000) 000-0000</li>
+									<li class="icon solid fa-home">1234 Somewhere Road #8254<br />
+									Nashville, TN 00000-0000</li>
+								</ul>
+							</section>
+
+						<!-- Footer -->
+						<footer id="footer">
+							<th:block th:include="/bottom"></th:block>
+						</footer>
+
+					</div>
+				</div>
+
+			</div>
+
+		<!-- Scripts -->
+		<th:block th:include="/common"></th:block>
+
+	</body>
+</html>
