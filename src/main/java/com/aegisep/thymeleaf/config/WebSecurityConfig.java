@@ -1,5 +1,6 @@
 package com.aegisep.thymeleaf.config;
 
+import com.aegisep.thymeleaf.Constants;
 import com.aegisep.thymeleaf.security.*;
 import com.aegisep.thymeleaf.user.CustomUserDetailsService;
 import org.slf4j.Logger;
@@ -38,14 +39,14 @@ public class WebSecurityConfig {
                 .antMatchers("/user/**").hasAnyRole("USER")
                 .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/login")
-                .loginProcessingUrl("/auth")
+                    .formLogin()
+                    .loginPage("/login")
+                    .loginProcessingUrl("/auth")
                 .and()
-                .logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true).deleteCookies("JSESSIONID")
+                    .logout()
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/")
+//                .invalidateHttpSession(true).deleteCookies(Constants.COOKIE_ID)
                 .and()
                 .csrf().disable()
 
