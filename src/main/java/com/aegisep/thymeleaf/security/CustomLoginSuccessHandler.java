@@ -1,5 +1,6 @@
 package com.aegisep.thymeleaf.security;
 
+import com.aegisep.thymeleaf.Constants;
 import com.aegisep.thymeleaf.user.CustomUserDetail;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,7 +22,7 @@ public class CustomLoginSuccessHandler extends SavedRequestAwareAuthenticationSu
 
         CustomUserDetail detail = (CustomUserDetail) token.getDetails();
 
-        request.getSession(true).setAttribute("user", detail);
+        request.getSession(true).setAttribute(Constants.SESSION_ID, detail);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         response.sendRedirect("/index");

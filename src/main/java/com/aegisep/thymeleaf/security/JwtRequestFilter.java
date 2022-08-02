@@ -1,6 +1,8 @@
 package com.aegisep.thymeleaf.security;
 
 
+import com.aegisep.thymeleaf.Constants;
+import com.aegisep.thymeleaf.user.User;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,11 +37,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         log.info("doFilterInternal Authorization : " + authorizationHeader);
 
-//        User user = (User) session.getAttribute("User");
-//
-//        if(user != null) {
-//            log.info("doFilterInternal user :  " + user);
-//        }
+        User user = (User) session.getAttribute(Constants.SESSION_ID);
+
+        if(user != null) {
+            log.info("doFilterInternal user :  " + user);
+        }
 
         //Header에서 Bearer 부분 이하로 붙은 token을 파싱한다.
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
