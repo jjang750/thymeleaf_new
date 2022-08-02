@@ -1,6 +1,6 @@
 package com.aegisep.thymeleaf.config;
 
-import com.aegisep.thymeleaf.security.JwtRequestFilter;
+import com.aegisep.thymeleaf.security.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,27 +46,39 @@ public class WebSecurityConfig {
                 .logoutSuccessUrl("/")
                 .invalidateHttpSession(true).deleteCookies("JSESSIONID")
                 .and()
-                .csrf().disable();
+                .csrf().disable()
 
-//                .addFilterBefore(customAuthenticationProcessingFilter(),
-//                        UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(customAuthenticationFilter(),
+                        UsernamePasswordAuthenticationFilter.class);
 
         log.info("filterChain end");
 
         return httpSecurity.build();
     }
-
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().antMatchers("/resources/**");
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public CustomAuthenticationFilter customAuthenticationFilter() throws Exception {
+        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(customAuthenticationManager());
+        customAuthenticationFilter.setFilterProcessesUrl("/auth");
+        customAuthenticationFilter.setAuthenticationSuccessHandler(customLoginSuccessHandler());
+        customAuthenticationFilter.afterPropertiesSet();
+        return customAuthenticationFilter;
+    }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        log.info("passwordEncoder start");
+    public CustomLoginSuccessHandler customLoginSuccessHandler() {
+        log.info("customLoginSuccessHandler :: CustomLoginSuccessHandler ");
+        return new CustomLoginSuccessHandler();
+    }
 
-        return new BCryptPasswordEncoder();
+    @Bean
+    public CustomAuthenticationManager customAuthenticationManager() {
+        log.info("customAuthenticationManager :: CustomAuthenticationManager ");
+        return new CustomAuthenticationManager();
     }
 
 }
