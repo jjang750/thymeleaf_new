@@ -6,19 +6,29 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 
 public class CustomUserDetail implements UserDetails {
+
+    private Collection<? extends GrantedAuthority> authorities;
+    private String password;
+    private String username;
+
+    public CustomUserDetail(User user) {
+        this.username = user.getUser_id();
+        this.password = user.getPasswd();
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return authorities;
     }
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return username;
     }
 
     @Override
@@ -38,6 +48,6 @@ public class CustomUserDetail implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

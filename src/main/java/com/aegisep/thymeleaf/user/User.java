@@ -14,16 +14,24 @@ import java.util.Collection;
 @Table(name = "USER")
 @Getter
 public class User implements Serializable {
-    @Setter
-    @Column(nullable = false, unique = true, length = 50)
-    private String userEmail;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "seq", nullable = false)
+    private Long seq;
 
-    @Setter
-    @Column(nullable = false)
-    private String userPw;
+    @Column(name = "user_id", nullable = false, length = 20)
+    private String user_id;
 
-    @Setter
-    @Column(nullable = false, length = 50)
-    @Enumerated(EnumType.STRING)
-    private Collection<? extends GrantedAuthority> role;
+    @Column(name = "user_name", length = 20)
+    private String user_name;
+
+    @Column(name = "passwd")
+    private String passwd;
+
+    private String auth_group;
+    private String auth_id;
+    private String company;
+    private String add_road;
+    private String add_detail;
+    private String post_code;
 }

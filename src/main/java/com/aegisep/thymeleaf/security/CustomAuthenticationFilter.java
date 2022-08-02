@@ -17,7 +17,7 @@ public class CustomAuthenticationFilter  extends UsernamePasswordAuthenticationF
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(request.getParameter("userEmail"), request.getParameter("userPw"));
+        UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(request.getParameter("username"), request.getParameter("password"));
         setDetails(request, authRequest);
         return this.getAuthenticationManager().authenticate(authRequest);
     }

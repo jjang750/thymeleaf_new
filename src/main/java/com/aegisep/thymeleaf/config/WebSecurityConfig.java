@@ -1,6 +1,7 @@
 package com.aegisep.thymeleaf.config;
 
 import com.aegisep.thymeleaf.security.*;
+import com.aegisep.thymeleaf.user.CustomUserDetailsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +80,11 @@ public class WebSecurityConfig {
     public CustomAuthenticationManager customAuthenticationManager() {
         log.info("customAuthenticationManager :: CustomAuthenticationManager ");
         return new CustomAuthenticationManager();
+    }
+
+    @Bean
+    public CustomUserDetailsService getUserDetailsService() {
+        return new CustomUserDetailsService();
     }
 
 }
