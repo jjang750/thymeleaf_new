@@ -4,10 +4,13 @@ import com.aegisep.thymeleaf.database.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 public class CustomUserDetailsService implements UserDetailsService {
@@ -24,9 +27,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         if(users.isEmpty()) {
             throw new UsernameNotFoundException("User ID not found {'"+username+"'}");
         }
-
         User loginUser = users.get(0);
-
         return new CustomUserDetail(loginUser);
     }
 }

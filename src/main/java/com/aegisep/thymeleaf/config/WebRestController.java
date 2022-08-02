@@ -28,7 +28,7 @@ public class WebRestController {
         log.info("goto login");
 
         ModelAndView view = new ModelAndView();
-        view.setViewName("/index");
+        view.setViewName("index");
 
         return view;
     }

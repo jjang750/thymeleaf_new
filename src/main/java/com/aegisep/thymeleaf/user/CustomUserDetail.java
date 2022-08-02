@@ -8,8 +8,8 @@ import java.util.Collection;
 public class CustomUserDetail implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
-    private String password;
-    private String username;
+    private final String password;
+    private final String username;
 
     public CustomUserDetail(User user) {
         this.username = user.getUser_id();

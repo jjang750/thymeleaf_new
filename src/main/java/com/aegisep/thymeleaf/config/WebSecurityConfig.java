@@ -57,7 +57,7 @@ public class WebSecurityConfig {
         return httpSecurity.build();
     }
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+    public PasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
@@ -66,6 +66,7 @@ public class WebSecurityConfig {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(customAuthenticationManager());
         customAuthenticationFilter.setFilterProcessesUrl("/auth");
         customAuthenticationFilter.setAuthenticationSuccessHandler(customLoginSuccessHandler());
+        customAuthenticationFilter.setAuthenticationFailureHandler(customAuthenticationFailureHandler());
         customAuthenticationFilter.afterPropertiesSet();
         return customAuthenticationFilter;
     }
@@ -74,6 +75,11 @@ public class WebSecurityConfig {
     public CustomLoginSuccessHandler customLoginSuccessHandler() {
         log.info("customLoginSuccessHandler :: CustomLoginSuccessHandler ");
         return new CustomLoginSuccessHandler();
+    }
+
+    @Bean
+    public CustomAuthenticationFailureHandler customAuthenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler();
     }
 
     @Bean

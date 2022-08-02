@@ -33,6 +33,7 @@
 							<h2 id="elements">Log In</h2>
 							<div class="row gtr-200">
 								<div class="col-6 col-12-medium">
+									<div th:text="${session.message}"></div>
 									<form method="post" action="/auth">
 										<div class="row gtr-uniform">
 											<div class="col-12">
