@@ -41,7 +41,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new CustomUserDetail(user);
     }
 
-    public CustomUserDetail loadUserByUsername(String username, String passwd) throws UsernameNotFoundException {
+    public CustomUserDetail loadUserByUsernameAndPassword(String username, String passwd) throws UsernameNotFoundException {
 
         Session session  = HibernateUtil.getSession();
 

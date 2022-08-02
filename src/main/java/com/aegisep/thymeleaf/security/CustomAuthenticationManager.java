@@ -25,7 +25,7 @@ public class CustomAuthenticationManager implements AuthenticationManager {
         log.info("authentication.getPrincipal {} ", authentication.getPrincipal().toString());
         log.info("authentication.getCredentials {} ", authentication.getCredentials());
 
-        CustomUserDetail userDetails = userDetailsService.loadUserByUsername(authentication.getPrincipal().toString(), authentication.getCredentials().toString());
+        CustomUserDetail userDetails = userDetailsService.loadUserByUsernameAndPassword(authentication.getPrincipal().toString(), authentication.getCredentials().toString());
         // 각종 처리를 구현
         // 비번이 일치하는지
         // 아이디로 회원을 조회 했을 때 존재하는 회원인지
