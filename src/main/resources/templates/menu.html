@@ -1,4 +1,4 @@
-<nav id="menu">
+<nav id="menu" xmlns:th="http://www.w3.org/1999/xhtml">
     <header class="major">
         <h2>Menu</h2>
     </header>
@@ -29,5 +29,12 @@
         <li><a href="#">Maximus Erat</a></li>
         <li><a href="#">Sapien Mauris</a></li>
         <li><a href="#">Amet Lacinia</a></li>
+        <div th:if="${#authorization.expr('isAuthenticated()')}">
+            <h1 th:text="${#authentication.name}">Name</h1>
+            <a th:href="@{/logout}">Logout</a>
+        </div>
+        <div th:unless="${#authorization.expr('isAuthenticated()')}">
+            <a th:href="@{~/pages(gotoPage=login)}">Login</a>
+        </div>
     </ul>
 </nav>

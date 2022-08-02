@@ -51,7 +51,6 @@ public class WebSecurityConfig {
 
                 .addFilterBefore(customAuthenticationFilter(),
                         UsernamePasswordAuthenticationFilter.class);
-
         log.info("filterChain end");
 
         return httpSecurity.build();
@@ -79,6 +78,7 @@ public class WebSecurityConfig {
 
     @Bean
     public CustomAuthenticationFailureHandler customAuthenticationFailureHandler() {
+        log.info("customAuthenticationFailureHandler :: CustomAuthenticationFailureHandler ");
         return new CustomAuthenticationFailureHandler();
     }
 
