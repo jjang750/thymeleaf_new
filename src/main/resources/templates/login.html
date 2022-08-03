@@ -13,7 +13,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 	</head>
-	<body class="is-preload">
+	<body class="is-preload" onload="init()">
 
 		<!-- Wrapper -->
 			<div id="wrapper">
@@ -33,7 +33,7 @@
 							<h2 id="elements">Log In</h2>
 							<div class="row gtr-200">
 								<div class="col-6 col-12-medium">
-									<div th:text="${session.message}"></div>
+									<div th:text="${session.message}" id="message"></div>
 									<form method="post" action="/auth">
 										<div class="row gtr-uniform">
 											<div class="col-12">
@@ -44,8 +44,8 @@
 											</div>
 											<!-- Break -->
 											<div class="col-6 col-12-small">
-												<input type="checkbox" id="save-id" name="save-id">
-												<label for="save-id">save</label>
+												<input type="checkbox" id="idSave" name="idSave" onclick="checkCookie(this)">
+												<label for="idSave">save id</label>
 											</div>
 											<!-- Break -->
 											<div class="col-12">
@@ -130,6 +130,61 @@
 
 		<!-- Scripts -->
 		<th:block th:include="/common"></th:block>
+		<script language="JavaScript">
+			function checkCookie(obj) {
+				if($("#username").val() == "") {
+					alert("User ID를 입력하여 주세요.");
+					return;
+				}
 
+				console.log("  >>>>>>>>>>>  " + obj.checked);
+
+				if(obj.checked)
+					setCookie("SET_USERID", $("#username").val(), 365*24*60*60*1000, "/");
+				else
+					deleteCookie("SET_USERID", 366*24*60*60*1000, "/");
+			}
+
+			function init() {
+				var value = getCookie("SET_USERID");
+
+				$("#message").val(value)
+
+				if(value != null){
+					$("#username").val(value)
+					$("input:checkbox[id='idSave']").prop("checked",true);
+				}
+			}
+		</script>
+		<script>
+
+			function setCookie(cookieName, cookieValue, cookieExpire, cookiePath){
+				var cookieText=escape(cookieName)+'='+escape(cookieValue);
+				cookieText+=(cookieExpire ? '; EXPIRES='+cookieExpire : '');
+				cookieText+=(cookiePath ? '; PATH='+cookiePath : '');
+				cookieText+= '; SECURE';
+				document.cookie=cookieText;
+			}
+
+			function getCookie(cookieName){
+				var cookieValue=null;
+				if(document.cookie){
+					var array=document.cookie.split((escape(cookieName)+'='));
+					if(array.length >= 2){
+						var arraySub=array[1].split(';');
+						cookieValue=unescape(arraySub[0]);
+					}
+				}
+				return cookieValue;
+			}
+
+			function deleteCookie(cookieName){
+				var temp=getCookie(cookieName);
+				if(temp){
+					setCookie(cookieName,temp,(new Date(1)));
+				}
+			}
+
+		</script>
 	</body>
 </html>
