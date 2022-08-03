@@ -1,9 +1,12 @@
 package com.aegisep.thymeleaf.user;
 
 import com.aegisep.thymeleaf.database.HibernateUtil;
+import com.aegisep.thymeleaf.security.CustomAuthenticationManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,6 +19,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class CustomUserDetailsService implements UserDetailsService {
+
+    private static final Logger log = LoggerFactory.getLogger(CustomUserDetailsService.class);
+
     @Override
     public CustomUserDetail loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -27,6 +33,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<User> users = query.list();
 
         if(users.isEmpty()) {
+            log.error("User ID not found {'"+username+"'}");
             throw new UsernameNotFoundException("User ID not found {'"+username+"'}");
         }
         User loginUser = users.get(0);
@@ -52,6 +59,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<User> users = query.list();
 
         if(users.isEmpty()) {
+            log.error("User ID not found {'"+username+"'}");
             throw new UsernameNotFoundException("User ID not found {'"+username+"'}");
         }
 

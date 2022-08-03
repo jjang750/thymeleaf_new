@@ -62,8 +62,8 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public CustomAuthenticationFilter customAuthenticationFilter() throws Exception {
-        CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter(customAuthenticationManager());
+    public UsernamePasswordAuthenticationFilter customAuthenticationFilter() throws Exception {
+        UsernamePasswordAuthenticationFilter customAuthenticationFilter = new UsernamePasswordAuthenticationFilter(customAuthenticationManager());
         customAuthenticationFilter.setFilterProcessesUrl("/auth");
         customAuthenticationFilter.setAuthenticationSuccessHandler(customLoginSuccessHandler());
         customAuthenticationFilter.setAuthenticationFailureHandler(customAuthenticationFailureHandler());
