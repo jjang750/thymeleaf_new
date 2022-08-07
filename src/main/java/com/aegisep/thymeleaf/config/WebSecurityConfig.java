@@ -3,6 +3,7 @@ package com.aegisep.thymeleaf.config;
 import com.aegisep.thymeleaf.Constants;
 import com.aegisep.thymeleaf.security.*;
 import com.aegisep.thymeleaf.user.CustomUserDetailsService;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,4 +95,16 @@ public class WebSecurityConfig {
         return new CustomUserDetailsService();
     }
 
+    @Bean
+    public SessionFactory buildSessionFactory() {
+        try {
+            org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            return configuration.buildSessionFactory();
+        }
+        catch (Throwable ex) {
+            log.error(ex.getLocalizedMessage(), ex);
+            throw new ExceptionInInitializerError(ex);
+        }
+    }
 }

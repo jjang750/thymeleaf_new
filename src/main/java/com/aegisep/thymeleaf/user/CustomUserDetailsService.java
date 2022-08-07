@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,10 +23,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private static final Logger log = LoggerFactory.getLogger(CustomUserDetailsService.class);
 
+    @Autowired
+    SessionFactory sessionFactory;
+
     @Override
     public CustomUserDetail loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Session session  = HibernateUtil.getSession();
+        Session session  = sessionFactory.openSession();
 
         Query<User> query = session.createQuery("From User where user_id =:id", User.class);
         query.setParameter("id", username);
@@ -50,7 +54,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     public CustomUserDetail loadUserByUsernameAndPassword(String username, String passwd) throws UsernameNotFoundException {
 
-        Session session  = HibernateUtil.getSession();
+        Session session  = sessionFactory.openSession();
 
         Query<User> query = session.createQuery("From User where user_id =:id and passwd = md5(:passwd)", User.class);
         query.setParameter("id", username);
