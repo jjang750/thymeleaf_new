@@ -1,22 +1,17 @@
 package com.aegisep.thymeleaf.user;
 
-import com.aegisep.thymeleaf.database.HibernateUtil;
-import com.aegisep.thymeleaf.security.CustomAuthenticationManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
 public class CustomUserDetailsService implements UserDetailsService {
