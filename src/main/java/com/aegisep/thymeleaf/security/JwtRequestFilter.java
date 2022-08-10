@@ -2,16 +2,20 @@ package com.aegisep.thymeleaf.security;
 
 
 import com.aegisep.thymeleaf.Constants;
+import com.aegisep.thymeleaf.user.CustomUserDetail;
+import com.aegisep.thymeleaf.user.CustomUserDetailsService;
 import com.aegisep.thymeleaf.user.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -31,6 +35,9 @@ import java.util.Collections;
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger(JwtRequestFilter.class);
+
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -65,17 +72,26 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         email = request.getHeader("email");
-        role = request.getHeader("role");
 
-        SecurityContext context = SecurityContextHolder.getContext();
+        try {
+            SecurityContext context = SecurityContextHolder.getContext();
 
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                email,
-                null,
-                Collections.singletonList(new SimpleGrantedAuthority(role))
-        );
+            CustomUserDetail userDetails = userDetailsService.loadUserByEmail(email);
 
-        context.setAuthentication(authentication);
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                    userDetails.getUsername(),
+                    userDetails.getPassword(),
+                    userDetails.getAuthorities());
+
+            context.setAuthentication(authentication);
+
+        }catch (UsernameNotFoundException ex) {
+            log.error(ex.getLocalizedMessage());
+            throw new ServletException(ex);
+        }
+
+
+
 
         log.info("doFilterInternal authorizationHeader");
         filterChain.doFilter(request, response);
