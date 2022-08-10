@@ -49,4 +49,10 @@ public class WebRestController {
         return index();
     }
 
+    @RequestMapping(value={"/api"})
+    public String api() {
+        log.info("goto api");
+        return "hello api";
+    }
+
 }

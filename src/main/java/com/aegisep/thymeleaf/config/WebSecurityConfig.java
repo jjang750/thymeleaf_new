@@ -24,20 +24,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class WebSecurityConfig {
 
     private static final Logger log = LoggerFactory.getLogger(WebSecurityConfig.class);
-
-    @Autowired
-    private JwtRequestFilter jwtRequestFilter;
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
 
         log.info("filterChain start");
 
         httpSecurity.authorizeRequests()
-                .antMatchers("/index", "/auth", "/login", "/resources/**", "/static/**").permitAll()
+                .antMatchers("/api", "/index", "/auth", "/login", "/resources/**", "/static/**").permitAll()
                 .antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .antMatchers("/manager/**").hasAnyRole("MANAGER")
                 .antMatchers("/user/**").hasAnyRole("USER")
+                .antMatchers("/api/**").hasAnyRole("API")
                 .anyRequest().authenticated()
                 .and()
                     .formLogin()

@@ -4,20 +4,30 @@ package com.aegisep.thymeleaf.security;
 import com.aegisep.thymeleaf.Constants;
 import com.aegisep.thymeleaf.user.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Collections;
 
 @Component
 @RequiredArgsConstructor
+@WebFilter(urlPatterns = "/api/*")
+@Order(0)
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger(JwtRequestFilter.class);
@@ -28,28 +38,46 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
+        if(!path.contains("/api")) {
+            log.info("doFilterInternal =" + path);
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         log.info("doFilterInternal start path : " + path);
 
         final String authorizationHeader = request.getHeader("Authorization");
-        String username = null;
         String token = null;
-        HttpSession session = request.getSession();
+        String email = null;
+        String role = "API";
 
         log.info("doFilterInternal Authorization : " + authorizationHeader);
-
-        User user = (User) session.getAttribute(Constants.SESSION_ID);
-
-        if(user != null) {
-            log.info("doFilterInternal user :  " + user);
-        }
 
         //Header에서 Bearer 부분 이하로 붙은 token을 파싱한다.
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             token = authorizationHeader.substring(7);
+            log.info("doFilterInternal authorizationHeader " + token);
         }
 
-        log.info("doFilterInternal authorizationHeader");
+        if(token == null) {
+            response.setStatus(401);
+            return;
+        }
 
+        email = request.getHeader("email");
+        role = request.getHeader("role");
+
+        SecurityContext context = SecurityContextHolder.getContext();
+
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                email,
+                null,
+                Collections.singletonList(new SimpleGrantedAuthority(role))
+        );
+
+        context.setAuthentication(authentication);
+
+        log.info("doFilterInternal authorizationHeader");
         filterChain.doFilter(request, response);
     }
 }
