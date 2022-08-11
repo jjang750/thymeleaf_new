@@ -84,8 +84,33 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<User> users = query.list();
 
         if(users.isEmpty()) {
-            log.error("User ID not found {'"+email+"'}");
-            throw new UsernameNotFoundException("User ID not found {'"+email+"'}");
+            log.error("email not found {'"+email+"'}");
+            throw new UsernameNotFoundException("email not found {'"+email+"'}");
+        }
+        User loginUser = users.get(0);
+
+        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+
+        org.springframework.security.core.userdetails.User.UserBuilder userBuilder = org.springframework.security.core.userdetails.User.builder().passwordEncoder(encoder::encode);
+
+        UserDetails user = userBuilder.username(loginUser.getUser_id()).password(loginUser.getPasswd())
+                .roles(loginUser.getAuth_id()).build();
+
+        return new CustomUserDetail(user);
+    }
+
+    public CustomUserDetail loadUserByToken(String token) throws UsernameNotFoundException {
+
+        Session session  = sessionFactory.openSession();
+
+        Query<User> query = session.createQuery("From User where token =:token", User.class);
+        query.setParameter("token", token);
+
+        List<User> users = query.list();
+
+        if(users.isEmpty()) {
+            log.error("token not found {'"+token+"'}");
+            throw new UsernameNotFoundException("token not found {'"+token+"'}");
         }
         User loginUser = users.get(0);
 

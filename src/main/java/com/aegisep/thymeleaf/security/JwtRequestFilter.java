@@ -54,29 +54,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         log.info("doFilterInternal start path : " + path);
 
         final String authorizationHeader = request.getHeader("Authorization");
-        String token = null;
-        String email = null;
-        String role = "API";
 
         log.info("doFilterInternal Authorization : " + authorizationHeader);
 
-        //Header에서 Bearer 부분 이하로 붙은 token을 파싱한다.
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            token = authorizationHeader.substring(7);
-            log.info("doFilterInternal authorizationHeader " + token);
-        }
-
-        if(token == null) {
+        if(authorizationHeader == null) {
             response.setStatus(401);
             return;
         }
 
-        email = request.getHeader("email");
-
         try {
             SecurityContext context = SecurityContextHolder.getContext();
 
-            CustomUserDetail userDetails = userDetailsService.loadUserByEmail(email);
+            CustomUserDetail userDetails = userDetailsService.loadUserByToken(authorizationHeader);
 
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                     userDetails.getUsername(),
