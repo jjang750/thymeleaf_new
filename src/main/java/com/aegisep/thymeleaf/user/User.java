@@ -3,11 +3,9 @@ package com.aegisep.thymeleaf.user;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
 
 @NoArgsConstructor
 @Entity
@@ -35,4 +33,6 @@ public class User implements Serializable {
     private String add_road;
     private String add_detail;
     private String post_code;
+    private String token;
+    private String email;
 }
