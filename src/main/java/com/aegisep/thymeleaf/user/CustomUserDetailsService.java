@@ -74,31 +74,6 @@ public class CustomUserDetailsService implements UserDetailsService {
         return new CustomUserDetail(user);
     }
 
-    public CustomUserDetail loadUserByEmail(String email) throws UsernameNotFoundException {
-
-        Session session  = sessionFactory.openSession();
-
-        Query<User> query = session.createQuery("From User where email =:email", User.class);
-        query.setParameter("email", email);
-
-        List<User> users = query.list();
-
-        if(users.isEmpty()) {
-            log.error("email not found {'"+email+"'}");
-            throw new UsernameNotFoundException("email not found {'"+email+"'}");
-        }
-        User loginUser = users.get(0);
-
-        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-
-        org.springframework.security.core.userdetails.User.UserBuilder userBuilder = org.springframework.security.core.userdetails.User.builder().passwordEncoder(encoder::encode);
-
-        UserDetails user = userBuilder.username(loginUser.getUser_id()).password(loginUser.getPasswd())
-                .roles(loginUser.getAuth_id()).build();
-
-        return new CustomUserDetail(user);
-    }
-
     public CustomUserDetail loadUserByToken(String token) throws UsernameNotFoundException {
 
         Session session  = sessionFactory.openSession();
