@@ -74,13 +74,11 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             context.setAuthentication(authentication);
 
-        }catch (UsernameNotFoundException ex) {
+        }catch (Exception ex) {
             log.error(ex.getLocalizedMessage());
-            throw new ServletException(ex);
+            response.setStatus(401);
+            return;
         }
-
-
-
 
         log.info("doFilterInternal authorizationHeader");
         filterChain.doFilter(request, response);
