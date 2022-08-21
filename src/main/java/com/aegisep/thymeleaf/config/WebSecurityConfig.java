@@ -29,7 +29,7 @@ public class WebSecurityConfig {
         log.info("filterChain start");
 
         httpSecurity.authorizeRequests()
-                .antMatchers("/api", "/index", "/auth", "/login", "/resources/**", "/static/**").permitAll()
+                .antMatchers("/api", "/index", "/auth", "/login", "/assets/**", "/images/**").permitAll()
                 .antMatchers("/admin/**").hasAnyRole("ADMIN")
                 .antMatchers("/manager/**").hasAnyRole("MANAGER")
                 .antMatchers("/user/**").hasAnyRole("USER")
@@ -91,7 +91,7 @@ public class WebSecurityConfig {
         return new CustomUserDetailsService();
     }
 
-    @Bean
+    @Bean(name="entityManagerFactory")
     public SessionFactory buildSessionFactory() {
         try {
             org.hibernate.cfg.Configuration configuration = new org.hibernate.cfg.Configuration();
