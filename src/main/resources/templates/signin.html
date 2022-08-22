@@ -5,7 +5,6 @@
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
 <html xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 	  lang="ko">
 	<head>
 		<title>Elements - Editorial by HTML5 UP</title>
@@ -13,7 +12,7 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 	</head>
-	<body class="is-preload" onload="init()">
+	<body class="is-preload">
 
 		<!-- Wrapper -->
 			<div id="wrapper">
@@ -30,34 +29,54 @@
 						<!-- Content -->
 						<section>
 							<!-- Elements -->
-							<h2 id="elements">Log In</h2>
+							<h2 id="elements">Sign In</h2>
 							<div class="row gtr-200">
 								<div class="col-6 col-12-medium">
 									<div th:text="${session.message}" id="message"></div>
-									<form method="post" action="/auth">
+									<form method="post" action="/signing">
 										<div class="row gtr-uniform">
+
 											<div class="col-12">
-												<input type="text" name="username" id="username" value="" placeholder="User ID" maxlength="20" />
+												<input type="text" name="userid" id="userid" value="" placeholder="User ID" maxlength="20" />
 											</div>
 											<div class="col-12">
-												<input type="password" name="password" id="password" value="" placeholder="Password" maxlength="40"/>
+												<input type="password" name="pre_password" id="pre_password" value="" placeholder="Password" maxlength="40"/>
+												<ul class="input_tip">
+													<li id="tip1">영문</li>
+													<li id="tip2">숫자</li>
+													<li id="tip3"><span class="f_mont">8~20</span>자이내</li>
+												</ul>
 											</div>
-											<!-- Break -->
-											<div class="col-6 col-12-small">
-												<input type="checkbox" id="idSave" name="idSave" onclick="checkCookie(this)">
-												<label for="idSave">save id</label>
+											<div id="toast" class="toast_box">
+												<p>특수문자는 <span>!@#$%^&*()</span> 중에서 입력하세요</p>
+												<!-- 입력가능 특수문자 !@#$%^&*() -->
 											</div>
-											<!-- Break -->
+
+											<div class="col-12">
+												<input type="password" name="password" id="password" value="" placeholder="Password Again" maxlength="40"/>
+												<ul class="input_tip">
+													<li id="tip4">비밀번호 일치</li>
+												</ul>
+											</div>
+											<div class="col-12">
+												<input type="text" name="username" id="username" value="" placeholder="User Name" maxlength="20" />
+											</div>
+											<div class="col-12">
+												<input type="email" name="email" id="email" value="" placeholder="Email" maxlength="20" />
+											</div>
+											<div class="col-12">
+												<h4>Token</h4>
+												<input type="text" name="token" id="token" th:value="${token}" placeholder="Token" maxlength="256" readonly />
+											</div>
 											<div class="col-12">
 												<ul class="actions">
-													<li><input type="submit" value="Log In" class="primary" /></li>
-													<li><input type="button" value="Sign In" onclick="gotoSignin()"/></li>
+													<li><input type="submit" value="Sign In" class="primary" /></li>
+													<li><input type="reset" value="Reset" /></li>
 												</ul>
 											</div>
 										</div>
 									</form>
 									<!-- Text stuff -->
-									<p>해당 사이트에 제공하는 모든 정보는 <u>회사 동의없이 수집, 배포, 전송 등의 행위</u>를 <b>엄격히 금지</b>합니다.</p>
 								</div>
 							</div>
 						</section>
@@ -142,17 +161,84 @@
 					deleteCookie("SET_USERID");
 			}
 
-			function init() {
-				var value = getCookie("SET_USERID");
-				if(value != null){
-					$("#username").val(value)
-					$("input:checkbox[id='idSave']").prop("checked",true);
-				}
-			}
+const pwInput = document.querySelector('#pre_password');
+const pwInput02 = document.querySelector('#password');
 
-			function gotoSignin() {
-				location.href='/signin';
-			}
+// 비밀번호
+pwInput.addEventListener('input', function () {
+    var userPw = this.value;
+    var checkEng = userPw.search(/[a-z]/ig);
+    var checkNum = userPw.search(/[0-9]/g);
+    var checkSpecial = userPw.search(/[\{\}\[\]\/?.,;:|~`\-_+<>\\\=\'\"]/gi);
+
+    var toastBox = document.getElementById('toast');
+
+    var tip1 = document.getElementById('tip1');
+    var tip2 = document.getElementById('tip2');
+    var tip3 = document.getElementById('tip3');
+    var tip4 = document.getElementById('tip4');
+
+    // 영문 체크
+    if (checkEng >= 0) {
+        tip1.classList.add('on');
+    } else {
+        tip1.classList.remove('on');
+    }
+
+    // 숫자 체크
+    if (checkNum >= 0) {
+        tip2.classList.add('on');
+    } else {
+        tip2.classList.remove('on');
+    }
+
+    // 글자수 체크
+    if (userPw.length >= 8 || userPw.length >= 20) {
+        tip3.classList.add('on');
+    } else {
+        tip3.classList.remove('on');
+    }
+
+    // 특수문자 체크
+    if(checkSpecial >= 0) {
+        toastBox.style.display = 'block';
+    } else {
+        toastBox.style.display = 'none';
+    }
+
+    if(userPw == pwInput02.value) {
+        tip4.classList.add('on');
+        pwInput02.parentNode.nextElementSibling.classList.add('hide');
+    } else {
+        tip4.classList.remove('on');
+        pwInput02.parentNode.nextElementSibling.classList.remove('hide');
+    }
+
+    if(checkEng >= 0 && checkNum >= 0 && userPw.length >= 8 || userPw.length >= 20) {
+        this.parentNode.nextElementSibling.classList.add('hide');
+    } else {
+        this.parentNode.nextElementSibling.classList.remove('hide');
+    }
+});
+
+// 비밀번호 확인
+pwInput02.addEventListener('input', function () {
+    var tip4 = document.getElementById('tip4');
+
+    if (pwInput.value == "" && pwInput02.value == "") {
+        tip4.classList.remove('on');
+    } else if (pwInput.value == pwInput02.value) {
+        tip4.classList.add('on');
+    } else {
+        tip4.classList.remove('on');
+    }
+
+    if(pwInput.value == pwInput02.value) {
+        this.parentNode.nextElementSibling.classList.add('hide');
+    } else {
+        this.parentNode.nextElementSibling.classList.remove('hide');
+    }
+});
 		</script>
 		<script>
 

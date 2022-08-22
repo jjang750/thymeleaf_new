@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.UUID;
+
 @RestController
 public class WebRestController {
     private static final Logger log = LoggerFactory.getLogger(WebRestController.class);
@@ -54,5 +56,24 @@ public class WebRestController {
         log.info("goto api");
         return "hello api";
     }
+
+    @RequestMapping(value="/signin")
+    public ModelAndView signin() {
+        log.info("goto signin");
+        ModelAndView view = new ModelAndView();
+        view.setViewName("/signin");
+        view.addObject("token", UUID.randomUUID().toString());
+
+        return view;
+    }
+
+    @RequestMapping(value="/signing")
+    public ModelAndView signing() {
+        log.info("goto signing");
+        ModelAndView view = new ModelAndView();
+        view.setViewName("/login");
+        return view;
+    }
+
 
 }

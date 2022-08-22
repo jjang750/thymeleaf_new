@@ -2271,3 +2271,19 @@ button,
     border-top: 0;
     margin-top: 0;
     padding-top: 0; }
+
+.input_tip {overflow: hidden; position: relative; transform: translateY(0); padding-top: 5px; visibility: visible; opacity: 1; max-height: 35px; 
+    transition: all 0.2s linear 0.2s; -webkit-transition: all 0.2s linear 0.2s;}
+.input_tip:after {display: block; clear: both; *zoom: 1; content: '';}
+.input_tip.hide {transform: translateY(-100%); visibility: hidden; opacity: 0; max-height: 0; padding-top: 0;
+transition: all 0.2s linear 0.2s; -webkit-transition: all 0.2s linear 0.2s;}
+.input_tip li {position: relative; float: left; margin: 0 0 0 18px; padding-right: 22px; height: 30px; line-height: 30px; font-size: 0.8rem; color: #aaa; list-style: none;}
+.input_tip li:first-child {margin: 0;}
+.input_tip li:after {position: absolute; top: 10px; right: 0; width: 11px; height: 5px; border-bottom: 1px solid #aaa; border-left: 1px solid #aaa; transform: rotate(-45deg); content: "";}
+.input_tip li .f_mont {font-weight: 500; color: #aaa;}
+.input_tip li.on {color: #2761ff;}
+.input_tip li.on:after {border-color: #2761ff;}
+.input_tip li.on .f_mont {color: #2761ff;}
+.toast_box {display: none; position: absolute; top: 62px; left: 0; padding: 5px 3px; background-color: #fff; border-radius: 5px; box-shadow: 1px 1px 7px rgba(0,0,0,0.15); z-index: 1;}
+.toast_box p {padding: 0 10px; line-height: 25px; font-size: 0.8rem; color: #111;}
+.toast_box p span {color: #2761ff;}
