@@ -32,15 +32,16 @@
 							<h2 id="elements">Sign In</h2>
 							<div class="row gtr-200">
 								<div class="col-6 col-12-medium">
-									<div th:text="${session.message}" id="message"></div>
-									<form method="post" action="/signing">
+									<form method="post" action="/signing" th:object="${userDTO}">
 										<div class="row gtr-uniform">
-
 											<div class="col-12">
-												<input type="text" name="userid" id="userid" value="" placeholder="User ID" maxlength="20" />
+												<input type="text" name="user_id" id="user_id" value="" placeholder="User ID" maxlength="20" onblur="checkUserId(this.value);"/>
+												<ul class="input_tip">
+													<li id="useridcheck">사용자 아이디를 입력하세요.</li>
+												</ul>
 											</div>
 											<div class="col-12">
-												<input type="password" name="pre_password" id="pre_password" value="" placeholder="Password" maxlength="40"/>
+												<input type="password" name="pre_passwd" id="pre_passwd" value="" placeholder="Password" maxlength="40"/>
 												<ul class="input_tip">
 													<li id="tip1">영문</li>
 													<li id="tip2">숫자</li>
@@ -53,13 +54,13 @@
 											</div>
 
 											<div class="col-12">
-												<input type="password" name="password" id="password" value="" placeholder="Password Again" maxlength="40"/>
+												<input type="password" name="passwd" id="passwd" value="" placeholder="Password Again" maxlength="40"/>
 												<ul class="input_tip">
 													<li id="tip4">비밀번호 일치</li>
 												</ul>
 											</div>
 											<div class="col-12">
-												<input type="text" name="username" id="username" value="" placeholder="User Name" maxlength="20" />
+												<input type="text" name="user_name" id="user_name" value="" placeholder="User Name" maxlength="20" />
 											</div>
 											<div class="col-12">
 												<input type="email" name="email" id="email" value="" placeholder="Email" maxlength="20" />
@@ -150,95 +151,103 @@
 		<!-- Scripts -->
 		<th:block th:include="/common"></th:block>
 		<script language="JavaScript">
-			function checkCookie(obj) {
-				if($("#username").val() == "") {
-					$("#message").val("User ID를 입력하세요.")
-					return;
-				}
-				if(obj.checked)
-					setCookie("SET_USERID", $("#username").val(), 30);
-				else
-					deleteCookie("SET_USERID");
+
+			function checkUserId(userid) {
+				$.ajax({
+					url: "/signin/checkuserid",
+					data: {"userid":userid},
+					method: "GET"
+					})
+					.done(function(h) {
+						$('#useridcheck').show()
+						$('#useridcheck').replaceWith(h);
+						console.log(h);
+					})
+					.fail(function(xhr, status, errorThrown) {
+						alert("fail : "+errorThrown);
+					})
+					.always(function(xhr, status) {
+					});
 			}
 
-const pwInput = document.querySelector('#pre_password');
-const pwInput02 = document.querySelector('#password');
+			const pwInput = document.querySelector('#pre_passwd');
+			const pwInput02 = document.querySelector('#passwd');
 
-// 비밀번호
-pwInput.addEventListener('input', function () {
-    var userPw = this.value;
-    var checkEng = userPw.search(/[a-z]/ig);
-    var checkNum = userPw.search(/[0-9]/g);
-    var checkSpecial = userPw.search(/[\{\}\[\]\/?.,;:|~`\-_+<>\\\=\'\"]/gi);
+			// 비밀번호
+			pwInput.addEventListener('input', function () {
+				var userPw = this.value;
+				var checkEng = userPw.search(/[a-z]/ig);
+				var checkNum = userPw.search(/[0-9]/g);
+				var checkSpecial = userPw.search(/[\{\}\[\]\/?.,;:|~`\-_+<>\\\=\'\"]/gi);
 
-    var toastBox = document.getElementById('toast');
+				var toastBox = document.getElementById('toast');
 
-    var tip1 = document.getElementById('tip1');
-    var tip2 = document.getElementById('tip2');
-    var tip3 = document.getElementById('tip3');
-    var tip4 = document.getElementById('tip4');
+				var tip1 = document.getElementById('tip1');
+				var tip2 = document.getElementById('tip2');
+				var tip3 = document.getElementById('tip3');
+				var tip4 = document.getElementById('tip4');
 
-    // 영문 체크
-    if (checkEng >= 0) {
-        tip1.classList.add('on');
-    } else {
-        tip1.classList.remove('on');
-    }
+				// 영문 체크
+				if (checkEng >= 0) {
+					tip1.classList.add('on');
+				} else {
+					tip1.classList.remove('on');
+				}
 
-    // 숫자 체크
-    if (checkNum >= 0) {
-        tip2.classList.add('on');
-    } else {
-        tip2.classList.remove('on');
-    }
+				// 숫자 체크
+				if (checkNum >= 0) {
+					tip2.classList.add('on');
+				} else {
+					tip2.classList.remove('on');
+				}
 
-    // 글자수 체크
-    if (userPw.length >= 8 || userPw.length >= 20) {
-        tip3.classList.add('on');
-    } else {
-        tip3.classList.remove('on');
-    }
+				// 글자수 체크
+				if (userPw.length >= 8 || userPw.length >= 20) {
+					tip3.classList.add('on');
+				} else {
+					tip3.classList.remove('on');
+				}
 
-    // 특수문자 체크
-    if(checkSpecial >= 0) {
-        toastBox.style.display = 'block';
-    } else {
-        toastBox.style.display = 'none';
-    }
+				// 특수문자 체크
+				if(checkSpecial >= 0) {
+					toastBox.style.display = 'block';
+				} else {
+					toastBox.style.display = 'none';
+				}
 
-    if(userPw == pwInput02.value) {
-        tip4.classList.add('on');
-        pwInput02.parentNode.nextElementSibling.classList.add('hide');
-    } else {
-        tip4.classList.remove('on');
-        pwInput02.parentNode.nextElementSibling.classList.remove('hide');
-    }
+				if(userPw == pwInput02.value) {
+					tip4.classList.add('on');
+					pwInput02.parentNode.nextElementSibling.classList.add('hide');
+				} else {
+					tip4.classList.remove('on');
+					pwInput02.parentNode.nextElementSibling.classList.remove('hide');
+				}
 
-    if(checkEng >= 0 && checkNum >= 0 && userPw.length >= 8 || userPw.length >= 20) {
-        this.parentNode.nextElementSibling.classList.add('hide');
-    } else {
-        this.parentNode.nextElementSibling.classList.remove('hide');
-    }
-});
+				if(checkEng >= 0 && checkNum >= 0 && userPw.length >= 8 || userPw.length >= 20) {
+					this.parentNode.nextElementSibling.classList.add('hide');
+				} else {
+					this.parentNode.nextElementSibling.classList.remove('hide');
+				}
+			});
 
-// 비밀번호 확인
-pwInput02.addEventListener('input', function () {
-    var tip4 = document.getElementById('tip4');
+			// 비밀번호 확인
+			pwInput02.addEventListener('input', function () {
+				var tip4 = document.getElementById('tip4');
 
-    if (pwInput.value == "" && pwInput02.value == "") {
-        tip4.classList.remove('on');
-    } else if (pwInput.value == pwInput02.value) {
-        tip4.classList.add('on');
-    } else {
-        tip4.classList.remove('on');
-    }
+				if (pwInput.value == "" && pwInput02.value == "") {
+					tip4.classList.remove('on');
+				} else if (pwInput.value == pwInput02.value) {
+					tip4.classList.add('on');
+				} else {
+					tip4.classList.remove('on');
+				}
 
-    if(pwInput.value == pwInput02.value) {
-        this.parentNode.nextElementSibling.classList.add('hide');
-    } else {
-        this.parentNode.nextElementSibling.classList.remove('hide');
-    }
-});
+				if(pwInput.value == pwInput02.value) {
+					this.parentNode.nextElementSibling.classList.add('hide');
+				} else {
+					this.parentNode.nextElementSibling.classList.remove('hide');
+				}
+			});
 		</script>
 		<script>
 
