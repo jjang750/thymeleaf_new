@@ -93,7 +93,7 @@ public class WebRestController {
         log.info(">>>>>>>>>>>>>>>>>>>>> " + userDTO);
         userDTO.setAuth_group("USER");
         userDTO.setAuth_id("USER");
-        User insert = customUserRepository.save(userDTO);
+        User insert = customUserRepository.saveAndFlush(userDTO);
         log.info(">>>>>>>>>>>>>>>>>>>>> " + insert);
         return view;
     }
