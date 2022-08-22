@@ -90,17 +90,11 @@ public class WebRestController {
         log.info("goto signing");
         ModelAndView view = new ModelAndView();
         view.setViewName("/login");
-
-
         log.info(">>>>>>>>>>>>>>>>>>>>> " + userDTO);
-
         userDTO.setAuth_group("USER");
         userDTO.setAuth_id("USER");
-
         User insert = customUserRepository.save(userDTO);
-
         log.info(">>>>>>>>>>>>>>>>>>>>> " + insert);
-
         return view;
     }
 
