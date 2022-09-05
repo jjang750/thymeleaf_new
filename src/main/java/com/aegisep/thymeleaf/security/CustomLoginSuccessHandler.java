@@ -24,7 +24,20 @@ public class CustomLoginSuccessHandler extends SavedRequestAwareAuthenticationSu
         request.getSession(true).setAttribute(Constants.SESSION_ID, detail);
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        response.sendRedirect("/index");
+
+        String auth = (token.getAuthorities().size() > 0)?
+                token.getAuthorities().toArray()[0].toString():
+                "/index";
+
+        if(auth.contains("ADMIN")) {
+            auth = "/admin";
+        } else if (auth.contains("MANAGER")) {
+            auth = "/manager";
+        } else {
+            auth = "/index";
+        }
+
+        response.sendRedirect(auth);
     }
 
 }
