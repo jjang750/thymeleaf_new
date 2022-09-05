@@ -34,18 +34,23 @@ public class WebSecurityConfig {
                 .antMatchers("/manager/**").hasAnyRole("MANAGER")
                 .antMatchers("/user/**").hasAnyRole("USER")
                 .antMatchers("/api/**").hasAnyRole("API")
+
                 .anyRequest().authenticated()
                 .and()
                     .formLogin()
                     .loginPage("/login")
                     .loginProcessingUrl("/auth")
+                    .failureUrl("/index") //your-unsuccessful-authentication-url-here
                 .and()
                     .logout()
                     .logoutUrl("/logout")
                     .logoutSuccessUrl("/")
+                .and()// 권한 외 페이지 접근 처리
+                    .exceptionHandling()
+                    .accessDeniedPage("/index")
 //                .invalidateHttpSession(true).deleteCookies(Constants.COOKIE_ID)
                 .and()
-                .csrf().disable()
+                .cors().and().csrf().disable()
 
                 .addFilterBefore(customAuthenticationFilter(),
                         UsernamePasswordAuthenticationFilter.class);
