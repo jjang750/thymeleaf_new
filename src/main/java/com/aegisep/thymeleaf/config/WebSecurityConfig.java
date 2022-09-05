@@ -41,14 +41,18 @@ public class WebSecurityConfig {
                     .loginPage("/login")
                     .loginProcessingUrl("/auth")
                     .failureUrl("/index") //your-unsuccessful-authentication-url-here
+
                 .and()
                     .logout()
                     .logoutUrl("/logout")
                     .logoutSuccessUrl("/")
+                    .invalidateHttpSession(true) //세션 날리기\
+//                .invalidateHttpSession(true).deleteCookies(Constants.COOKIE_ID)
+
                 .and()// 권한 외 페이지 접근 처리
                     .exceptionHandling()
                     .accessDeniedPage("/index")
-//                .invalidateHttpSession(true).deleteCookies(Constants.COOKIE_ID)
+
                 .and()
                 .cors().and().csrf().disable()
 
