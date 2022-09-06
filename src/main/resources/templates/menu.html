@@ -36,5 +36,10 @@
         <div th:unless="${#authorization.expr('isAuthenticated()')}">
             <a th:href="@{~/pages(gotoPage=login)}">Login</a>
         </div>
+        <div>
+            <p th:text="${#authentication.name}"></p>
+            <p th:text="${#authentication.authorities}"></p>
+            <p th:text="${#authentication.authenticated}"></p>
+        </div>
     </ul>
 </nav>
